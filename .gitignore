@@ -1,0 +1,36 @@
+# ===== Build / đóng gói (KHÔNG push — rất nặng, tự build lại được) =====
+dist/
+build/
+*.manifest
+# build_exe.spec thì GIỮ LẠI (là cấu hình build)
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Môi trường ảo
+.venv/
+venv/
+env/
+ENV/
+
+# ===== Log / tạm sinh khi chạy =====
+error_log.txt
+*.log
+
+# ===== Model AI tải về (nằm ở ~/.rembg, nhưng phòng khi copy vào repo) =====
+*.onnx
+.rembg/
+
+# ===== Ảnh kết quả test (tùy chọn — bỏ comment nếu không muốn push) =====
+# *_khoet.png
+# *_tachnen.png
+# test_*.png
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

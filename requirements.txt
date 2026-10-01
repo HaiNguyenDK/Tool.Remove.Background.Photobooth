@@ -1,0 +1,12 @@
+# ====== Tool Tách Nền AI - Dependencies ======
+# AI engine tách nền (U^2-Net / ISNet qua ONNX Runtime)
+rembg[cpu]>=2.0.57
+onnxruntime>=1.17.0
+
+# Xử lý ảnh & Thị giác máy tính (flood-fill, connected-components khoét khung)
+pillow>=10.0.0
+numpy>=1.24.0
+opencv-python>=4.8.0
+
+# Giao diện desktop hiện đại (dark mode)
+customtkinter>=5.2.0
