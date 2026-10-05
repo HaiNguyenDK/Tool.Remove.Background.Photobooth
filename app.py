@@ -248,16 +248,16 @@ class App(ctk.CTk):
                       fg_color="gray30", hover_color="gray25",
                       command=self.pb_clear).pack(side="right")
 
-        self._slider(f, "Độ nhạy màu (click)", 5, 90, 18, "tol")
+        self._slider(f, "Độ nhạy trắng / loang (±#ffffff)", 2, 60, 16, "tol")
         ctk.CTkLabel(f, text="— Tinh chỉnh tự động —", text_color="gray55",
                      font=ctk.CTkFont(size=11)).pack(pady=(8, 0))
-        self._slider(f, "Ngưỡng độ sáng", 150, 255, 225, "bright", self._auto_param_changed)
-        self._slider(f, "Độ bão hòa tối đa", 0, 90, 35, "sat", self._auto_param_changed)
+        self._slider(f, "Ngưỡng độ sáng", 150, 255, 230, "bright", self._auto_param_changed)
+        self._slider(f, "Độ bão hòa tối đa", 0, 90, 15, "sat", self._auto_param_changed)
         self._slider(f, "Diện tích ô tối thiểu (%)", 0, 10, 1, "area", self._auto_param_changed)
         ctk.CTkLabel(f, text="— Viền —", text_color="gray55",
                      font=ctk.CTkFont(size=11)).pack(pady=(8, 0))
         self._slider(f, "Nở/Co viền (px)", -15, 15, 0, "expand")
-        self._slider(f, "Làm mịn viền", 0, 6, 1, "feather", step=0.5)
+        self._slider(f, "Soft edge (mềm mép cắt)", 0, 6, 1.5, "feather", step=0.5)
 
         ctk.CTkButton(f, text="🖼️  Xem thử ảnh sau khung…", height=36,
                       fg_color="gray30", hover_color="gray25",
@@ -389,11 +389,12 @@ class App(ctk.CTk):
             return
         try:
             rgb = np.array(self.source_img.convert("RGB"))
-            self.auto_hole = fc.detect_light_holes(
+            self.auto_hole = fc.detect_holes_floodfill(
                 rgb,
                 brightness=int(self._sv("bright")),
                 saturation_max=int(self._sv("sat")),
                 min_area_ratio=self._sv("area") / 100.0,
+                tolerance=int(self._sv("tol")),
             )
             n = self._count_regions(self.auto_hole)
             self._recompute_photobooth()
@@ -435,11 +436,12 @@ class App(ctk.CTk):
         h, w = rgb.shape[:2]
 
         if rerun_auto and self.auto_hole is not None:
-            self.auto_hole = fc.detect_light_holes(
+            self.auto_hole = fc.detect_holes_floodfill(
                 rgb,
                 brightness=int(self._sv("bright")),
                 saturation_max=int(self._sv("sat")),
                 min_area_ratio=self._sv("area") / 100.0,
+                tolerance=int(self._sv("tol")),
             )
 
         hole = np.zeros((h, w), np.uint8)
@@ -605,6 +607,7 @@ class App(ctk.CTk):
         params = dict(brightness=int(self._sv("bright")),
                       saturation_max=int(self._sv("sat")),
                       min_area_ratio=self._sv("area") / 100.0,
+                      tolerance=int(self._sv("tol")),
                       expand=int(self._sv("expand")),
                       feather=float(self._sv("feather")))
         self._busy = True

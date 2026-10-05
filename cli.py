@@ -52,11 +52,12 @@ def main():
                    help="Dùng tách chủ thể AI thay vì khoét khung")
 
     # Khoét khung
-    p.add_argument("--bright", type=int, default=225, help="[khung] Ngưỡng độ sáng (150-255)")
-    p.add_argument("--sat", type=int, default=35, help="[khung] Độ bão hòa tối đa (0-90)")
+    p.add_argument("--bright", type=int, default=230, help="[khung] Ngưỡng độ sáng (150-255)")
+    p.add_argument("--sat", type=int, default=15, help="[khung] Độ bão hòa tối đa (0-90)")
+    p.add_argument("--tol", type=int, default=16, help="[khung] Độ nhạy trắng loang ±#ffffff (2-60)")
     p.add_argument("--min-area", type=float, default=1.0, help="[khung] Diện tích ô tối thiểu (%%)")
     p.add_argument("--expand", type=int, default=0, help="[khung] Nở/co viền (px)")
-    p.add_argument("--feather", type=float, default=1.5, help="[khung] Làm mịn viền")
+    p.add_argument("--feather", type=float, default=1.5, help="[khung] Soft edge: làm mềm mép cắt (0 = sắc nét)")
 
     # AI
     p.add_argument("-m", "--model", default=DEFAULT_MODEL, choices=list(MODELS.keys()),
@@ -76,7 +77,7 @@ def main():
         else:
             out, _ = fc.cut_auto(
                 img, brightness=args.bright, saturation_max=args.sat,
-                min_area_ratio=args.min_area / 100.0,
+                min_area_ratio=args.min_area / 100.0, tolerance=args.tol,
                 expand=args.expand, feather=args.feather)
         if dst.lower().endswith((".jpg", ".jpeg")):
             flat = Image.new("RGB", out.size, (255, 255, 255))
